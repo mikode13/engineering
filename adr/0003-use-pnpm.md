@@ -15,6 +15,10 @@ The team considered the following constraints:
 - Installs must be reproducible locally and in CI.
 - The dependency layout should prevent packages from importing dependencies they do not
   declare.
+- Installing dependencies should not execute arbitrary code by default. Several recent
+  npm supply-chain attacks delivered their payload through install-time lifecycle
+  scripts (`postinstall` and similar), so the package manager's default behavior toward
+  those scripts is a security property.
 - The tool must work well for single-package repositories now and support workspaces if
   a monorepo is created later, without requiring one.
 - The tool must support the Node.js versions MiKode targets.
@@ -40,6 +44,13 @@ because its flat, hoisted `node_modules` layout allows importing packages that a
 declared as dependencies (phantom dependencies), which pnpm's symlinked layout prevents
 by default. pnpm also stores packages in a shared content-addressable store, so repeated
 installs across MiKode projects use less disk space and time.
+
+Defaults also differ on install-time scripts: npm executes dependency lifecycle scripts
+during installation unless invoked with `--ignore-scripts`, while pnpm 10 and later
+refuse to run them unless the dependency is explicitly allowlisted. Under pnpm, a
+compromised transitive dependency cannot run code at install time merely by being
+installed. This mitigates one common attack path; it is not complete protection, since
+malicious code can still run when a compromised package is imported at runtime.
 
 ### Yarn
 
@@ -67,6 +78,8 @@ non-transferable documentation.
 
 - One set of install, script, and CI commands across all MiKode projects.
 - Strict dependency isolation catches undeclared dependencies at development time.
+- Install-time lifecycle scripts of dependencies do not run unless explicitly approved,
+  closing the default install-script path used by several npm supply-chain attacks.
 - The shared store makes installs fast and disk-efficient across many small projects.
 - Workspaces are available later without changing package manager.
 
@@ -78,6 +91,9 @@ non-transferable documentation.
   installation method that does not rely on it.
 - The strict `node_modules` layout can surface latent bugs in dependencies that rely on
   hoisting; resolving these occasionally requires configuration overrides.
+- Dependencies that legitimately need install scripts (native modules such as `sharp`
+  or `esbuild`) fail to build until they are allowlisted, which adds a review step to
+  adding such dependencies.
 - Contributors coming from npm must learn minor command differences.
 
 ## Related standards
@@ -92,5 +108,7 @@ release and requires Node.js 22.13 or later.
 - [pnpm motivation](https://pnpm.io/motivation)
 - [pnpm installation](https://pnpm.io/installation)
 - [pnpm settings](https://pnpm.io/settings)
+- [pnpm 10 release discussion (lifecycle scripts disabled by default)](https://github.com/orgs/pnpm/discussions/8945)
+- [Socket: pnpm 10.0.0 blocks lifecycle scripts by default](https://socket.dev/blog/pnpm-10-0-0-blocks-lifecycle-scripts-by-default)
 - [Node.js Corepack documentation](https://nodejs.org/api/corepack.html)
 - [npm `packageManager` field](https://nodejs.org/api/packages.html#packagemanager)

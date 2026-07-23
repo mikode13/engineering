@@ -14,19 +14,30 @@ npm-registry dependencies.
 Projects adopting this standard MUST:
 
 1. Use pnpm for installing dependencies and running package scripts.
-2. Pin the pnpm version in the `package.json` `packageManager` field.
+2. Pin the exact pnpm version in the `package.json` `packageManager` field.
 3. Commit `pnpm-lock.yaml` and keep it in sync with `package.json`.
 4. Use `pnpm install --frozen-lockfile` in CI so builds fail when the lockfile is out of
    date instead of silently resolving different versions.
 5. Use pnpm commands in scripts, documentation, and contributor instructions.
+6. Keep pnpm's default of not running dependency lifecycle scripts. When a dependency
+   legitimately needs its install scripts (typically native modules), allowlist that
+   specific dependency in `pnpm.onlyBuiltDependencies` and treat the allowlist entry as
+   a reviewable change.
 
 Projects MUST NOT:
 
-- Commit `package-lock.json` or `yarn.lock`.
-- Rely on Corepack to provision pnpm. Corepack is not distributed with Node.js 25 and
-  later; developers install pnpm with one of the
-  [documented installation methods](https://pnpm.io/installation). Once installed, pnpm
-  reads the `packageManager` field and can switch to the pinned version itself.
+- Mix package managers in one repository: no `package-lock.json`, `yarn.lock`, or Bun
+  lockfiles, and no npm, Yarn, or Bun commands in scripts, CI, or documentation.
+- Re-enable dependency lifecycle scripts globally (for example, by allowlisting `*` or
+  disabling the protection); install-time script execution stays opt-in per dependency.
+- Depend on Corepack. Corepack is not distributed with Node.js 25 and later, so no
+  script, CI step, or documented setup path may assume it is present.
+
+Developers SHOULD install pnpm explicitly with one of the
+[documented installation methods](https://pnpm.io/installation); once installed, pnpm
+reads the `packageManager` field and switches to the pinned version itself. A developer
+MAY use Corepack on their own machine to provision pnpm, provided the project works
+without it.
 
 ## Required configuration
 
@@ -48,6 +59,17 @@ The CI install step is:
 pnpm install --frozen-lockfile
 ```
 
+When a dependency needs its install scripts, allowlist it explicitly (interactively with
+`pnpm approve-builds`, or directly in `package.json`):
+
+```json
+{
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp"]
+  }
+}
+```
+
 ## Exceptions
 
 A project MAY use a different package manager only when an external platform requires it
@@ -66,4 +88,5 @@ delete the old lockfile in the same change.
 - [pnpm installation](https://pnpm.io/installation)
 - [pnpm CLI: install](https://pnpm.io/cli/install)
 - [pnpm CLI: import](https://pnpm.io/cli/import)
+- [pnpm settings: `onlyBuiltDependencies`](https://pnpm.io/settings#onlybuiltdependencies)
 - [npm `packageManager` field](https://nodejs.org/api/packages.html#packagemanager)
