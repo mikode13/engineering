@@ -2,7 +2,7 @@
 
 ADRs record significant cross-project decisions, the alternatives considered, and the
 consequences accepted. They are numbered sequentially and use lowercase kebab-case file
-names.
+names. New ADRs should start from the [ADR template](../templates/ADR.template.md).
 
 ## Proposed decisions
 

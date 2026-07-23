@@ -57,3 +57,14 @@ related standard, add or update a template when needed, and update the indexes.
 
 Use relative links for documents in this repository and authoritative links for external
 facts. Keep historical reasoning in ADRs and active rules in standards.
+
+## License
+
+The documentation in this repository is licensed under the
+[Creative Commons Attribution 4.0 International License](LICENSE) (CC BY 4.0).
+
+This differs deliberately from the proposed [licensing standard](standards/licensing.md):
+that standard targets MiKode software, while this repository contains documentation and
+templates intended to be copied and adapted. The
+[LICENSE.template](templates/LICENSE.template) file keeps its own legal text; CC BY 4.0
+applies to the surrounding documentation.
