@@ -1,6 +1,6 @@
 # ADR 0001: Use Prettier for cross-project code formatting
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-07-24
 
 ## Context

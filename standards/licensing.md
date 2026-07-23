@@ -1,12 +1,11 @@
 # Licensing standard
 
-- Status: Draft
+- Status: Active
 - Last reviewed: 2026-07-24
 - Related ADRs: [ADR 0002: Use the Commons Clause with the MIT License for source-available software](../adr/0002-use-commons-clause-with-mit.md)
 
-This document describes the proposed standard. It becomes an active cross-project
-requirement when ADR 0002 is accepted. It is documentation of an intended licensing
-policy, not legal advice or a guarantee of legal protection.
+This standard is active because ADR 0002 has been accepted. It is documentation of an
+intended licensing policy, not legal advice or a guarantee of legal protection.
 
 ## Scope
 

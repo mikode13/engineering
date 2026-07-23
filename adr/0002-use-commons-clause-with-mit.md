@@ -1,6 +1,6 @@
 # ADR 0002: Use the Commons Clause with the MIT License for source-available software
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-07-24
 
 ## Context

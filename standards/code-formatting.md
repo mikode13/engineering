@@ -1,11 +1,10 @@
 # Code formatting standard
 
-- Status: Draft
+- Status: Active
 - Last reviewed: 2026-07-24
 - Related ADRs: [ADR 0001: Use Prettier for cross-project code formatting](../adr/0001-use-prettier.md)
 
-This document describes the proposed standard. It becomes an active cross-project
-requirement when ADR 0001 is accepted.
+This standard is active because ADR 0001 has been accepted.
 
 ## Scope
 

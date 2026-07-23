@@ -23,9 +23,8 @@ See the [ADR index](adr/README.md).
 
 ### Standards
 
-Standards describe the current or proposed rules for MiKode projects. A standard is only
-active when its status says `Active`; proposed decisions and draft standards are not yet
-mandatory.
+Standards describe the current rules for MiKode projects. A standard is active when its
+status says `Active`.
 
 See the [standards index](standards/README.md).
 
@@ -36,17 +35,14 @@ must be completed and validated in the target repository before it becomes effec
 
 See the [templates index](templates/README.md).
 
-## Current work
+## Current standards and decisions
 
-The repository currently contains two proposed decisions and two draft standards:
+The repository currently contains two accepted decisions and two active standards:
 
 - [ADR 0001: Use Prettier for cross-project code formatting](adr/0001-use-prettier.md)
 - [ADR 0002: Use the Commons Clause with the MIT License for source-available software](adr/0002-use-commons-clause-with-mit.md)
 - [Code formatting standard](standards/code-formatting.md)
 - [Licensing standard](standards/licensing.md)
-
-There are currently no active cross-project standards. The documents above become active
-only after their related decisions are accepted.
 
 ## Documenting a new decision
 
@@ -63,7 +59,7 @@ facts. Keep historical reasoning in ADRs and active rules in standards.
 The documentation in this repository is licensed under the
 [Creative Commons Attribution 4.0 International License](LICENSE) (CC BY 4.0).
 
-This differs deliberately from the proposed [licensing standard](standards/licensing.md):
+This differs deliberately from the [licensing standard](standards/licensing.md):
 that standard targets MiKode software, while this repository contains documentation and
 templates intended to be copied and adapted. The
 [LICENSE.template](templates/LICENSE.template) file keeps its own legal text; CC BY 4.0

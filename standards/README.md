@@ -1,10 +1,9 @@
 # Standards
 
 Standards define rules that MiKode projects should apply consistently. Each document
-declares its status; draft standards describe proposed rules and are not mandatory until
-their related decision is accepted.
+declares its status; active standards are mandatory within their stated scope.
 
-## Draft standards
+## Active standards
 
-- [Code formatting standard](code-formatting.md) — proposed Prettier configuration and adoption workflow.
-- [Licensing standard](licensing.md) — proposed source-available licensing workflow and validation checklist.
+- [Code formatting standard](code-formatting.md) — Prettier configuration and adoption workflow.
+- [Licensing standard](licensing.md) — source-available licensing workflow and validation checklist.
