@@ -17,8 +17,9 @@ Projects adopting this standard MUST:
 1. Use TypeScript 6.x. TypeScript 7 becomes the required line in a follow-up change once
    typescript-eslint supports it.
 2. Extend the shared configuration instead of defining compiler options directly:
-   `@mikode/tsconfig/node` for Node.js code, `@mikode/tsconfig/react` for React code,
-   or `@mikode/tsconfig/base` when neither environment applies.
+   `@mikode/tsconfig/node` for Node.js code, `@mikode/tsconfig/browser` for browser
+   code without JSX, `@mikode/tsconfig/react` for React code, or
+   `@mikode/tsconfig/base` when no environment applies.
 3. Keep `strict` and the shared safety options enabled; a project MUST NOT weaken an
    option from the shared configuration.
 4. Publish packages as ES modules only, with `"type": "module"` in `package.json`.
@@ -78,7 +79,7 @@ package source.
 }
 ```
 
-`@mikode/tsconfig/react` (extends base):
+`@mikode/tsconfig/browser` (extends base), for browser or universal code without JSX:
 
 ```json
 {
@@ -87,8 +88,17 @@ package source.
     "moduleResolution": "bundler",
     "target": "es2022",
     "lib": ["es2022", "dom", "dom.iterable"],
-    "jsx": "react-jsx",
     "noEmit": true
+  }
+}
+```
+
+`@mikode/tsconfig/react` (extends browser):
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react-jsx"
   }
 }
 ```
@@ -100,9 +110,9 @@ Intent of the notable options:
 - `verbatimModuleSyntax` forces `import type` for type-only imports, keeping emitted
   ESM predictable.
 - `module: "nodenext"` follows Node.js module semantics for libraries executed directly
-  by Node.js; the React variant defers module handling to the bundler.
+  by Node.js; the browser and React variants defer module handling to the bundler.
 - The ECMAScript 2023 target matches the Node.js 22 floor from the
-  [Node.js version standard](nodejs-version.md); the React variant targets ECMAScript
+  [Node.js version standard](nodejs-version.md); the browser variant targets ECMAScript
   2022 and lets the bundler transpile further if its browser matrix requires it.
 - `skipLibCheck` skips re-checking declaration files of dependencies, whose errors a
   project cannot fix locally.

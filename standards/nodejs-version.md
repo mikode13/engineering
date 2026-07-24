@@ -31,13 +31,15 @@ Projects SHOULD review the minimum version when the Node.js release schedule cha
 ```json
 {
   "engines": {
-    "node": "^22.13.0 || >=24.0.0"
+    "node": "^22.13.0 || ^24.0.0"
   }
 }
 ```
 
-The range excludes odd-numbered lines below the newest supported LTS because they never
-become LTS and stop receiving updates quickly.
+The range explicitly lists the LTS lines MiKode supports. A new release line is added
+only after it enters LTS and passes CI; Node.js 26 is expected to be added when it
+enters LTS in October 2026. Extending the range requires a package release — the
+accepted cost of not claiming support for untested runtimes.
 
 `.nvmrc`:
 
@@ -65,5 +67,6 @@ on the declared floor before publishing under it.
 
 - [ADR 0004: Support Node.js 22 and later](../adr/0004-support-node-22-and-later.md)
 - [Node.js end-of-life dates](https://nodejs.org/en/about/eol)
+- [Evolving the Node.js release schedule](https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule)
 - [npm `engines` field](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#engines)
 - [nvm `.nvmrc` usage](https://github.com/nvm-sh/nvm#nvmrc)

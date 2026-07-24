@@ -26,7 +26,7 @@ Relevant facts at the time of this decision:
 MiKode will share one strict TypeScript configuration through an independent package,
 `@mikode/tsconfig`, that projects extend instead of writing their own compiler options.
 
-The package ships three configurations:
+The package ships four configurations:
 
 - `@mikode/tsconfig/base` — language strictness only, environment-agnostic. Enables
   `strict` plus additional safety options: `noUncheckedIndexedAccess`,
@@ -34,17 +34,21 @@ The package ships three configurations:
 - `@mikode/tsconfig/node` — extends base for Node.js libraries and services:
   `module: "nodenext"`, ECMAScript 2023 target and library, and declaration output for
   published packages.
-- `@mikode/tsconfig/react` — extends base for React projects built with a bundler:
-  `jsx: "react-jsx"`, DOM libraries, and bundler module resolution.
+- `@mikode/tsconfig/browser` — extends base for browser code without JSX (DOM
+  libraries, universal packages built with a bundler): DOM libraries and bundler
+  module resolution.
+- `@mikode/tsconfig/react` — extends browser for React projects, adding
+  `jsx: "react-jsx"`.
 
 Projects use TypeScript 6.x. TypeScript 7 is adopted in a follow-up change once
 typescript-eslint supports it; because 6.0 and 7.0 implement the same language, that
 migration is expected to be configuration-compatible.
 
 MiKode packages compile and publish ES modules only (`"type": "module"`). Dual
-CommonJS/ESM publishing is not part of this decision; Node.js 22.12 and later can
-`require()` ES modules, which covers remaining CommonJS consumers on supported Node.js
-versions.
+CommonJS/ESM publishing is not part of this decision. Node.js 22.12 and later can
+`require()` synchronous ES modules, which narrows the CommonJS interoperability gap on
+supported Node.js versions, though a module graph that uses top-level await remains
+unavailable to `require()`.
 
 The exact option values are defined in the
 [TypeScript standard](../standards/typescript.md). This repository documents them; the
@@ -84,7 +88,8 @@ the 6.x and 7.x languages are aligned.
 
 Dual publishing maximizes consumer compatibility but doubles build outputs and invites
 dual-package hazards (two copies of one module in a process). With Node.js 22.12+ able
-to `require()` ESM, ESM-only publishing serves all supported consumers.
+to `require()` synchronous ESM, ESM-only publishing serves CommonJS consumers on
+supported Node.js versions except where a module graph uses top-level await.
 
 ## Consequences
 

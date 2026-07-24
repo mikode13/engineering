@@ -35,10 +35,19 @@ The package ships two configurations:
   - typescript-eslint `strictTypeChecked` and `stylisticTypeChecked` presets, with
     type information provided by `parserOptions.projectService`;
   - basic import hygiene via `eslint-plugin-import-x`: no circular imports, no
-    duplicate imports, and enforced type-only imports where applicable.
+    duplicate imports, and enforced type-only imports where applicable;
+  - type-aware rules scoped to `*.ts` and `*.tsx` files only. JavaScript tooling files
+    (`eslint.config.js`, `prettier.config.mjs`, standalone scripts) are linted with
+    syntax-only rules so they do not need to belong to a TypeScript project.
 - `@mikode/code-quality/react` — extends base for React projects:
-  - `eslint-plugin-react` and `eslint-plugin-react-hooks` recommended rules;
+  - `eslint-plugin-react` and `eslint-plugin-react-hooks` recommended rules, with the
+    plugin's modern JSX runtime configuration so components are not forced to import
+    React solely for JSX;
   - accessibility rules from `eslint-plugin-jsx-a11y`.
+
+Before this ADR is accepted, the rule set is validated in `mikode-code-style` and at
+least one small TypeScript library; findings from that trial update this ADR while it
+remains proposed.
 
 The configuration MUST NOT enable formatting rules; formatting remains Prettier's
 responsibility. Full architecture-boundary rules (ports and adapters, domain

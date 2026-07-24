@@ -20,16 +20,18 @@ Projects adopting this standard MUST:
    date instead of silently resolving different versions.
 5. Use pnpm commands in scripts, documentation, and contributor instructions.
 6. Keep pnpm's default of not running dependency lifecycle scripts. When a dependency
-   legitimately needs its install scripts (typically native modules), allowlist that
-   specific dependency in `pnpm.onlyBuiltDependencies` and treat the allowlist entry as
-   a reviewable change.
+   legitimately needs its install scripts (typically native modules), allow that
+   specific dependency in the `allowBuilds` map in `pnpm-workspace.yaml` and treat the
+   entry as a reviewable change.
+7. Include a `preinstall` guard so that running npm or Yarn in the repository fails
+   immediately instead of creating a foreign lockfile.
 
 Projects MUST NOT:
 
 - Mix package managers in one repository: no `package-lock.json`, `yarn.lock`, or Bun
   lockfiles, and no npm, Yarn, or Bun commands in scripts, CI, or documentation.
-- Re-enable dependency lifecycle scripts globally (for example, by allowlisting `*` or
-  disabling the protection); install-time script execution stays opt-in per dependency.
+- Enable `dangerouslyAllowAllBuilds` or otherwise re-enable dependency lifecycle
+  scripts globally; install-time script execution stays opt-in per dependency.
 - Depend on Corepack. Corepack is not distributed with Node.js 25 and later, so no
   script, CI step, or documented setup path may assume it is present.
 
@@ -41,11 +43,14 @@ without it.
 
 ## Required configuration
 
-`package.json` MUST contain a pinned pnpm version:
+`package.json` MUST contain a pinned pnpm version and the package-manager guard:
 
 ```json
 {
-  "packageManager": "pnpm@11.17.0"
+  "packageManager": "pnpm@11.17.0",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm"
+  }
 }
 ```
 
@@ -59,15 +64,14 @@ The CI install step is:
 pnpm install --frozen-lockfile
 ```
 
-When a dependency needs its install scripts, allowlist it explicitly (interactively with
-`pnpm approve-builds`, or directly in `package.json`):
+When a dependency needs its install scripts, allow it explicitly in
+`pnpm-workspace.yaml` (pnpm 11 removed the earlier `onlyBuiltDependencies` family of
+settings and no longer reads the `pnpm` field in `package.json`):
 
-```json
-{
-  "pnpm": {
-    "onlyBuiltDependencies": ["sharp"]
-  }
-}
+```yaml
+# pnpm-workspace.yaml
+allowBuilds:
+  sharp: true
 ```
 
 ## Exceptions
@@ -88,5 +92,7 @@ delete the old lockfile in the same change.
 - [pnpm installation](https://pnpm.io/installation)
 - [pnpm CLI: install](https://pnpm.io/cli/install)
 - [pnpm CLI: import](https://pnpm.io/cli/import)
-- [pnpm settings: `onlyBuiltDependencies`](https://pnpm.io/settings#onlybuiltdependencies)
+- [pnpm settings](https://pnpm.io/settings)
+- [pnpm 11.0 release notes](https://pnpm.io/blog/releases/11.0)
+- [pnpm: only allow pnpm](https://pnpm.io/only-allow-pnpm)
 - [npm `packageManager` field](https://nodejs.org/api/packages.html#packagemanager)

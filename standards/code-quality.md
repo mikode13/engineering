@@ -18,8 +18,10 @@ Projects adopting this standard MUST:
 1. Lint with ESLint 10 or later using a flat `eslint.config.js`.
 2. Extend the shared configuration: `@mikode/code-quality/base` for TypeScript code,
    `@mikode/code-quality/react` for React code.
-3. Ensure every linted file belongs to a TypeScript project, since the shared
-   configuration uses type-aware rules through `parserOptions.projectService`.
+3. Ensure every linted TypeScript file belongs to a TypeScript project, since the
+   shared configuration applies type-aware rules (through
+   `parserOptions.projectService`) to `*.ts` and `*.tsx` files. JavaScript tooling
+   files are linted with syntax-only rules and do not need tsconfig coverage.
 4. Provide a lint script and a CI check that fails on any error.
 5. Justify every rule suppression with a comment on the `eslint-disable` directive
    explaining why the rule does not apply there.
@@ -57,9 +59,12 @@ The shared configurations contain:
 
 - `base`: typescript-eslint `strictTypeChecked` and `stylisticTypeChecked` presets with
   `projectService` enabled, plus `eslint-plugin-import-x` rules for circular-import
-  detection, duplicate imports, and consistent type-only imports.
+  detection, duplicate imports, and consistent type-only imports. Type-aware rules
+  apply to `*.ts` and `*.tsx` only; JavaScript tooling files (configuration files,
+  standalone scripts) get syntax-only rules.
 - `react`: everything in base, plus the recommended rules of `eslint-plugin-react` and
-  `eslint-plugin-react-hooks`, and the accessibility rules of `eslint-plugin-jsx-a11y`.
+  `eslint-plugin-react-hooks` with the modern JSX runtime configured (no React import
+  required for JSX), and the accessibility rules of `eslint-plugin-jsx-a11y`.
 
 Until `@mikode/code-quality` is published, projects assemble the same presets directly
 in their `eslint.config.js` and switch to the package when it is available.
@@ -79,6 +84,9 @@ rather than suppressed inline.
 New projects add the configuration and CI check before their first feature. Existing
 projects adopt in one change, fix or explicitly suppress all findings before merging,
 and review suppressions rather than lowering the shared tier.
+
+The shared rule set is validated in `mikode-code-style` and at least one small
+TypeScript library before ADR 0006 is accepted and this standard becomes active.
 
 ## References
 
